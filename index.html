@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>STED | Simple Token Explorer Dapp</title>
+
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+
+    <style>
+        ::placeholder {
+            font-size: .9rem;
+        }
+    </style>
+</head>
+
+<body class="bg-light-subtle bg-gradient">
+    <!-- Header -->
+    <div class="container">
+        <div class="row min-vh-100 align-items-center justify-content-between">
+            <div class="col-lg-5 text-center mx-auto">
+                <h4 class="mb-4">SIMPLE TOKEN EXPLORER</h4>
+
+                <form id="tokenForm">
+                    <div class="mb-3">
+                        <input class="form-control form-control-lg" type="text" name="address" id="address"
+                            placeholder="Enter Token Address..."
+                            aria-label="Search by Address/ Txn Hash / Block / Token" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100" id="submitBtn">
+                        Get Info
+                    </button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal" id="tokenModal" data-bs-backdrop="static" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-body py-4">
+                    <div class="d-flex justify-content-between align-items-center  mb-4">
+                        <div class="d-flex gap-2">
+                            <h4 class="modal-title token-name mb-0">Token Name</h4>
+                            <span class="token-symbol">sym</span>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="row gy-4 mb-5">
+                        <div class="col-lg-4">
+                            <div class="card border-0 shadow-sm h-100 bg-light-subtle">
+                                <div class="card-body">
+                                    <p class="fw-bold">Overview</p>
+
+                                    <p class="small text-muted mb-1">MAX TOTAL SUPPLY</p>
+                                    <p class="fw-medium token-supply mb-3">-</p>
+
+                                    <p class="small text-muted mb-1">HOLDERS</p>
+                                    <p class="fw-medium token-holders mb-3">-</p>
+
+                                    <p class="small text-muted mb-1">TOTAL TRANSFERS</p>
+                                    <p class="fw-medium token-total-transfers mb-0">-</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card border-0 shadow-sm h-100 bg-light-subtle">
+                                <div class="card-body">
+                                    <p class="fw-bold">Market</p>
+
+                                    <p class="small text-muted mb-1">PRICE</p>
+                                    <p class="fw-medium token-price mb-3">-</p>
+
+                                    <p class="small text-muted mb-1">FULLY DILUTED MARKET CAP</p>
+                                    <p class="fw-medium token-diluted-market-cap mb-3">-</p>
+
+                                    <p class="small text-muted mb-1">CIRCULATING SUPPLY MARKET CAP</p>
+                                    <p class="fw-medium tokensupply-market-cap mb-0">-</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card border-0 shadow-sm h-100 bg-light-subtle">
+                                <div class="card-body">
+                                    <p class="fw-bold">Other Info</p>
+
+                                    <p class="small text-muted mb-1">TOKEN CONTRACT (WITH 6 DECIMALS)</p>
+                                    <p class="fw-medium token-address mb-0">-</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row gy-4">
+                        <!-- Latest Block -->
+                        <div class="col-lg-12 mx-auto">
+                            <div class="card border-0 shadow-sm h-100">
+                                <div class="card-header">
+                                    <p class="mb-0 fw-bold">Latest Transfer Transactions</p>
+                                </div>
+                                <div class="card-body">
+                                    <ul class="list-group list-group-flush token-transactions">
+                                        <li class="list-group-item py-1 px-0">
+                                            <div class="d-lg-flex justify-content-between align-items-center">
+                                                <div class="d-flex gap-3">
+                                                    <box-icon class="d-none d-lg-inline-flex" type="book" name="package"
+                                                        size="lg" border="square"></box-icon>
+                                                    <div class="">
+                                                        <a href="javascript:;"
+                                                            class="d-block small text-decoration-none">0x7e7e0196807ec52d5...</a>
+                                                        <p class="text-muted small mb-0"></p>
+                                                    </div>
+                                                </div>
+                                                <div class="">
+                                                    <p class="mb-0 small">From <a href="javascript:;"
+                                                            class="text-decoration-none">0x1Fbb9b...1Dc282D5</a></p>
+                                                    <p class="mb-0 small">To <a href="javascript:;"
+                                                            class="text-decoration-none">0xEf1c6E...2554BF6B</a></p>
+                                                </div>
+                                                <span class="badge text-bg-light">0.1 ETH</span>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+
+    <script type="module">
+        import { ethers, formatEther, formatUnits } from "/assets/js/ethers.min.js";
+
+        const APIKEY = "";
+        const provider = new ethers.JsonRpcProvider(
+            "https://mainnet.infura.io/v3/52591f6051994d468264ccf916b0aad8" + APIKEY
+        );
+
+        const ERC20_ABI = [
+            "function name() view returns (string)",
+            "function symbol() view returns (string)",
+            "function totalSupply() view returns (uint256)",
+            "function decimals() view returns (uint256)",
+            "function owner() view returns (address)",
+            "function balanceOf(address) view returns (uint)",
+
+
+            "event Transfer(address indexed from, address indexed to, uint amount)"
+        ];
+        // const address = "0xdAC17F958D2ee523a2206206994597C13D831ec7";
+
+        const main = async (address = "0xdAC17F958D2ee523a2206206994597C13D831ec7", input) => {
+            const contract = await new ethers.Contract(address, ERC20_ABI, provider);
+
+            // Read Contract Details
+            // contract.name().then((name) => console.log(name));
+            const name = await contract.name();
+            const symbol = await contract.symbol();
+            const totalSupply = await contract.totalSupply();
+            const owner = await contract.owner();
+            const decimals = await contract.decimals();
+
+
+            let token_blocks = "";
+            let latest_transactions = "";
+
+            const block = await provider.getBlockNumber()
+            const transferEvents = await contract.queryFilter('Transfer', block - 1, block)
+            if (transferEvents) {
+                for (const block of transferEvents) {
+                    // Transaction
+                    let amount = formatEther(block.args['amount']);
+                    amount = Math.round(amount * 1e4) / 1e4;
+
+                    latest_transactions +=
+                        `<li class="list-group-item px-1">
+                            <div class="d-lg-flex justify-content-between align-items-center">
+                                <div class="d-flex gap-3">
+                                    <box-icon class="d-none d-lg-inline-flex" type="book" name="package"
+                                        size="lg" border="square"></box-icon>
+                                    <div class="">
+                                        <a target="_blank" href="https://etherscan.io/tx/${block.transactionHash}"
+                                            class="d-block small text-decoration-none mb-1"><span class="d-lg-none">TX#</span> ${block.transactionHash.substring(0, 19)}...</a>
+
+                                        <p class="text-muted small mb-0">
+                                            <a target="_blank" href="https://etherscan.io/block/${block.blockNumber}"
+                                            class="d-block small text-decoration-none">
+                                                <span class="d-lg-none">Block#</span> ${block.blockNumber}
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div class="d-lg-flex align-items-start gap-5">
+                                    <div class="text-lg-end">
+                                        <p class="mb-0 small">From <a target="_blank" href="https://etherscan.io/address/${block.args[0]}"
+                                                class="text-decoration-none">${block.args[0].substring(0, 8)}...${block.args[0].substring(block.args[0].length - 8)}</a></p>
+                                        <p class="mb-0 small">To <a target="_blank" href="https://etherscan.io/address/${block.args[1]}"
+                                                class="text-decoration-none">${block.args[1].substring(0, 8)}...${block.args[1].substring(block.args[1].length - 8)}</a></p>
+                                    </div>
+                                    <span class="badge text-bg-light">${(amount)} ETH</span>
+                                </div>
+                            </div>
+                        </li>`;
+
+                };
+            }
+
+
+
+            // Load Read Contract
+            const tokenModal = document.getElementById('tokenModal')
+            const modal = new bootstrap.Modal(tokenModal);
+
+            tokenModal.querySelector('.token-name').textContent = name ? name : 'token';
+            tokenModal.querySelector('.token-symbol').textContent = symbol ? `(${symbol})` : 'sym';
+            tokenModal.querySelector('.token-address').innerHTML = address ? `<a href="https://etherscan.io/token/${address}" class="text-decoration-none" target="_blank">${address}</a>` : 'sym';
+            tokenModal.querySelector('.token-supply').textContent = totalSupply ? totalSupply.toLocaleString("en-US") : 'sym';
+            tokenModal.querySelector('.token-transactions').innerHTML = latest_transactions ? latest_transactions : '';
+            // console.log(tokenModal.querySelector('.token-symbol'));
+
+            modal.show();
+            if (input) input.value = '';
+        };
+
+        document.querySelector('form#tokenForm').addEventListener("submit", (e) => {
+            e.preventDefault();
+            const input = document.querySelector('input#address');
+            const button = document.querySelector('#submitBtn');
+            if (input) {
+                const prevHtml = button.innerHTML;
+                button.innerHTML =
+                    `<div class="spinner-border text-white" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                    </div>`;
+                main(input.value, input);
+                button.innerHTML = prevHtml;
+            }
+        });
+        // main();
+    </script>
+</body>
+
+</html>
